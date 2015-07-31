@@ -1,7 +1,9 @@
+import os
 import re
 import csv
 
-_NAME_ABBR_PATH = './name_abbr.tab'
+_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+_NAME_ABBR_PATH = os.path.join(_SCRIPT_DIR, 'name_abbr.tab')
 _CAPITAL_NUM_REGEX = re.compile('[0-9]+|[A-Z]+(?![^0-9A-Z])|[A-Z](?=[^0-9A-Z])')
 
 def get_name_abbr_dict(name_abbr_path = _NAME_ABBR_PATH):
