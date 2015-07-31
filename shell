@@ -5,13 +5,16 @@ from os import path
 import json
 import argparse
 from cmn_name_helper import get_name_abbr_dict
-from cmn_pkg_helper import get_cmn_pkg_fun_list, get_cmn_pkg_dict, validate_cmn_pkg_path, get_pkgs_by_fun
+from cmn_pkg_helper import get_cmn_fun_list, get_cmn_pkg_dict, validate_cmn_pkg_path, get_pkgs_by_fun, get_cmn_fun_pkg_mapping
 from index_metadata import IndexMetadata
 from cmn_color_helper import ColorStr
 
 
 def get_fun_list(pkg_root_path):
-    return get_cmn_pkg_fun_list(pkg_root_path)
+    return get_cmn_fun_list(pkg_root_path)
+
+def get_fun_pkg_tab_list(pkg_root_path):
+    return get_cmn_fun_pkg_mapping(pkg_root_path)
 
 def get_fun_list_json():
     return json.dumps(get_fun_list(pkg_root_path))
@@ -30,6 +33,8 @@ def _gen_optparser():
     op = argparse.ArgumentParser(description='Search common functions more easily.')
     op.add_argument('-l', '--list-fun', help='List All Common Functions',
             action='store_true', dest='list_fun')
+    op.add_argument('-m', '--pkg-fun-mapping', help='Get All Common Fn-Pkg Mapping',
+            action='store_true', dest='fun_pkg_mapping')
     op.add_argument('-s', '--search-fun', help='Search Common Functions by Tokens',
             dest='search_tokens', nargs='+')
     op.add_argument('-k', '--get-pkgs', help='Get Packages by Function',
@@ -48,11 +53,12 @@ opt_parser = _gen_optparser()
 args = opt_parser.parse_args()
 pkg_path = validate_cmn_pkg_path(args.pkg_path)
 list_fun = args.list_fun
+fun_pkg_mapping = args.fun_pkg_mapping
 mapping_fun_name = args.mapping_fun_name
 search_tokens = args.search_tokens
 if not pkg_path:
     sys.exit('The package path doesn\'t valid: ' + args.pkg_path)
-if not list_fun and not search_tokens and not mapping_fun_name:
+if not list_fun and not fun_pkg_mapping and not search_tokens and not mapping_fun_name:
     print >>sys.stderr, 'Please at least choose -l or -s!\nSee also Help.\n'
     #print('Please at least choose -l or -s!', file=sys.stderr)
     opt_parser.print_help()
@@ -61,6 +67,9 @@ if not list_fun and not search_tokens and not mapping_fun_name:
 
 if list_fun:
     print ('\n').join(get_fun_list(pkg_path))
+
+if fun_pkg_mapping:
+    print ('\n').join(get_fun_pkg_tab_list(pkg_path))
 
 if mapping_fun_name:
     print ('\n').join(get_pkg_by_fun(pkg_path, mapping_fun_name))
