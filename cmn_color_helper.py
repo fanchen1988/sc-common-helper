@@ -11,10 +11,10 @@ class ColorStr:
 
     @staticmethod
     def color_fun_name(fun):
-        return ColorStr._UNDERLINE + ColorStr._BOLD + ColorStr._OKBLUE + fun + ColorStr._ENDC
+        return ColorStr._HEADER + ColorStr._BOLD + fun + ColorStr._ENDC
 
     @staticmethod
     def color_pkg_name(pkg):
-        return ColorStr._HEADER + pkg + ColorStr._ENDC
+        return ColorStr._UNDERLINE + pkg + ColorStr._ENDC
 
 
