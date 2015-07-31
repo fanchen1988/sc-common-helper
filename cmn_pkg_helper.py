@@ -18,7 +18,11 @@ def validate_cmn_pkg_path(pkg_path):
 def get_cmn_fun_list(root_pkg_path):
     pkg_paths = _get_cmn_pkg_paths(root_pkg_path)
     def fun_list_reduction(reduction, pkg_path):
-        with open(pkg_path) as f: reduction.extend(_get_codes_fun_list(f.read()))
+        pkg_name = _get_pkg_name(pkg_path)
+        with open(pkg_path) as f:
+            fun_list = _get_codes_fun_list(f.read())
+            fun_list.append(pkg_name)
+            reduction.extend(fun_list)
         return reduction
     return reduce(fun_list_reduction, pkg_paths, [])
 
@@ -29,6 +33,7 @@ def get_cmn_fun_pkg_mapping(root_pkg_path):
         fun_pkg_tab_formatter = "%s\t" + pkg_name
         with open(pkg_path) as f:
             fun_pkg_tab_mapping = map(lambda f: fun_pkg_tab_formatter % f, _get_codes_fun_list(f.read()))
+            fun_pkg_tab_mapping.append(pkg_name + "\t.")
             reduction.extend(fun_pkg_tab_mapping)
         return reduction
     return reduce(fun_pkg_mapping_list_reduction, pkg_paths, [])
