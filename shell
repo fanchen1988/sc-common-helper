@@ -78,6 +78,6 @@ if search_tokens and len(search_tokens) > 0:
             print '--------'
         print '========\n'
     print '\n=============='
-    print 'Totally {} function(s) found'.format(len(result_meta))
+    print '{} function(s) found in total'.format(len(result_meta))
     print '=============='
 
